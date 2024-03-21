@@ -1,9 +1,10 @@
 import './style.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import {TextureHelper} from "three/addons";
 
 
-//scene setup
+//SCENE setup --------------------------------------------------------------------------------------------------
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1,100)
 const renderer = new THREE.WebGLRenderer({
@@ -24,21 +25,58 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 4)
 scene.add(ambientLight)
 
 
+
+
+
+// CUBES --------------------------------------------------------------------------------------------------
+const geometryY = new THREE.BoxGeometry(15,15,15    );
+const materialY = new THREE.MeshBasicMaterial({color: 0xffef00});
+const cubeY = new THREE.Mesh(geometryY, materialY);
+cubeY.position.set(-40,0,0)
+
+const geometryV = new THREE.BoxGeometry(15, 15,15);
+const materialV = new THREE.MeshBasicMaterial({color: 0x8a2be2});
+const cubeV = new THREE.Mesh(geometryV, materialV);
+cubeV.position.set(60,10,0)
+
+scene.add(cubeY, cubeV);
+
+
+
+// HTML Elements --------------------------------------------------------------------------------------------------
 const chevronR = document.querySelector('#chevron-right')
 const chevronL = document.querySelector('#chevron-left')
 
+//const cameraCubeVPosition = new THREE.Vector2(-20,10)
 
-chevronR.onclick = function(){console.log("click")}
 
 
-let mixer
+chevronR.onclick = function() {
+    const cameraCubeYPosition = new THREE.Vector2(80,10)
+   // camera.position.lerp(cameraCubeYPosition, 0,1)
 
+    camera.position.set(80,10)
+}
+
+chevronL.onclick = function() {
+    const targetPosition = new THREE.Vector3(10, 10)
+    //camera.position.lerp(targetPosition, 0,1)
+
+    camera.position.set(-20,0)
+}
+
+
+
+// DUCK --------------------------------------------------------------------------------------------------
+
+// let mixer
+//
 // const loader = new GLTFLoader();
 //
 // loader.load( 'duck.glb', function ( gltf ) {
 //
-//     gltf.scene.scale.set(4,4,4)
-//     gltf.scene.position.set(-50,0,0)
+//     gltf.scene.scale.set(10,10,10)
+//     gltf.scene.position.set(-40,-10,0)
 //
 //     mixer = new THREE.AnimationMixer( gltf.scene );
 //     const action = mixer.clipAction( gltf.animations[1] );
@@ -52,7 +90,7 @@ let mixer
 //
 // } );
 
-//const clock = new THREE.Clock()
+const clock = new THREE.Clock()
 
 function animate(){
     requestAnimationFrame(animate);

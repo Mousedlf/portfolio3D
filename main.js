@@ -1,7 +1,8 @@
 import './style.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import {TextureHelper} from "three/addons";
+import {OrbitControls, TextureHelper} from "three/addons";
+import { gsap } from "gsap";
 
 
 //SCENE setup --------------------------------------------------------------------------------------------------
@@ -39,7 +40,23 @@ const materialV = new THREE.MeshBasicMaterial({color: 0x8a2be2});
 const cubeV = new THREE.Mesh(geometryV, materialV);
 cubeV.position.set(60,10,0)
 
-scene.add(cubeY, cubeV);
+const geometryB = new THREE.BoxGeometry(15, 15,15);
+const materialB = new THREE.MeshBasicMaterial({color: 0x0000FF});
+const cubeB = new THREE.Mesh(geometryB, materialB);
+cubeB.position.set(-120,60,0)
+
+scene.add(cubeY, cubeV, cubeB);
+
+//tableau ici
+const cameraPositions = [
+    {x: -100, y: 60, z: 50},
+{x: -20, y: 0, z: 50},
+{x: -80, y: 10, z: 50}
+]
+
+
+
+//-----------------------
 
 
 
@@ -47,23 +64,75 @@ scene.add(cubeY, cubeV);
 const chevronR = document.querySelector('#chevron-right')
 const chevronL = document.querySelector('#chevron-left')
 
-//const cameraCubeVPosition = new THREE.Vector2(-20,10)
-
 
 
 chevronR.onclick = function() {
-    const cameraCubeYPosition = new THREE.Vector2(80,10)
-   // camera.position.lerp(cameraCubeYPosition, 0,1)
 
-    camera.position.set(80,10)
+    const currentCameraPosition = camera.position.clone()
+
+    cameraPositions.forEach((e)=>{
+        if(e === "lala"){
+            console.log(e)
+
+        }
+    })
+
+    //const nextCameraPosition =
+
+    gsap.to(camera.position, {x:80, y:10, duration: 1})
+
 }
 
 chevronL.onclick = function() {
-    const targetPosition = new THREE.Vector3(10, 10)
-    //camera.position.lerp(targetPosition, 0,1)
 
-    camera.position.set(-20,0)
+    const test= camera.position.clone()
+    console.log(test)
+    console.log(cameraPositions.indexOf("lala"))
+
+    gsap.to(camera.position, {x:-100, y:60, duration: 1})
+
+
 }
+
+
+showElem(cameraPositions, 0);
+
+function showElem(cameraPositions, index) {
+    if (cameraPositions[index] !== undefined) {
+
+        chevronR.addEventListener('click', function() {
+            let current = this;
+            nextElem(cameraPositions, index, current);
+        });
+        chevronL.addEventListener('click', function() {
+            let current = this;
+            prevElem(cameraPositions, index, current);
+        });
+    } else {
+        index = 0;
+        showElem(cameraPositions, index);
+    }
+}
+
+function nextElem(cameraPositions, index, current) {
+    let currentElem = current.parentElement;
+    index++;
+    const test= camera.position.clone()
+    console.log(test)
+    console.log(index)
+
+}
+
+function prevElem(cameraPositions, index, current) {
+    let currentElem = current.parentElement;
+    index--;
+    const test= camera.position.clone()
+    console.log(test)
+    console.log(index)
+}
+
+
+
 
 
 
@@ -100,6 +169,9 @@ function animate(){
     //    if (mixer){
     //        mixer.update(delta)
     //    }
+
+
+
 
 
     renderer.render(scene, camera);
